@@ -1,7 +1,7 @@
-#include "arduino_secrets.h"
-#include "thingProperties.h"
-#include <Wire.h>
-#include <BH1750.h>
+#include "arduino_secrets.h"  // Include a header file with your secrets (e.g., Wi-Fi credentials)
+#include "thingProperties.h"  // Include a header file with IoT Cloud properties
+#include <Wire.h>  // Include the Wire library for I2C communication
+#include <BH1750.h>  // Include the BH1750 light sensor library
 
 BH1750 lightMeter;  // Create an instance of the BH1750 light sensor library
 
@@ -34,19 +34,18 @@ void setup() {
 void loop() {
   // Update IoT Cloud to communicate with the Arduino Cloud
   ArduinoCloud.update();
-  
+
   unsigned long currentMillis = millis();  // Get the current time in milliseconds
-  
+
   // Check if it's time to read the light level based on the defined interval
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;  // Record the current time as the last checked time
-    
+
     // Read the light level from the sensor
     light_level = lightMeter.readLightLevel();
-    
+
     // Check if the light level is above the threshold and if we haven't already updated
-    if (light_level >= LIGHT_THRESHOLD && sunlight_update != "started")
-    {
+    if (light_level >= LIGHT_THRESHOLD && sunlight_update != "started") {
       sunlight_update = "started";  // Indicate that sunlight has started
     }
     // Check if the light level is below the threshold and if we haven't already updated
